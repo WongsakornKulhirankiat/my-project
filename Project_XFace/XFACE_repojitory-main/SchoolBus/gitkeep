@@ -1,0 +1,29 @@
+###main_Cameratest.py###
+## Add fujiwara
+from multiprocessing import Process, Value
+import BusCamera_sample
+
+        ## Add fujiwara
+        self.buscameratkinter = BusCamera_sample.Buscameratkinter()
+
+
+
+## Add fujiwara
+        self.SubProcess = Process(target=self.buscameratkinter.main)  ### important main() -> main
+        self.SubProcess.start()
+
+## Add fujiwara
+    def __del__(self):
+        print("killing me")
+        self.SubProcess.terminate()
+
+
+###XFace_Login_Cameratest.py###
+## Add fujiwara
+        self.labelcount = main_app.buscameratkinter.countlist
+        self.afterId = self.after(1000,self.Update)
+
+## Add fujiwara
+    def Update(self):
+        self.password_label.configure(text=str(self.labelcount))
+        self.afterId = self.after(1000,self.Update)

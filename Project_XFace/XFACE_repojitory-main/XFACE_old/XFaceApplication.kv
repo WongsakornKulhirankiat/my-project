@@ -1,0 +1,1575 @@
+#:kivy 2.1.0
+#:import App kivy.app.App
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import DateTimeContent __main__.DateTimeContent
+#:import DisableEnableContent __main__.DisableEnableContent
+#:import VolumeContent __main__.VolumeContent
+
+<ScreenManagement>
+    main_background: 'assets/background/0.png'
+    canvas.before:
+        Rectangle:
+            pos: root.pos
+            size: root.size
+            source: root.main_background
+    HomeScreen:
+        name: 'home'
+    SyncScreen:
+        name: 'sync'
+    NumpadScreen:
+        name: 'numpad'
+    AdminScreen:
+        name: 'admin'
+    RegisterScreen:
+        name: 'r1'
+    RegisterScreen2:
+        name: 'r2'
+    RegisterScreen3:
+        name: 'r3'
+    RegisterScreen4:
+        name: 'r4'
+    RegisterScreen5:
+        name: 'r5'
+    DeleteEmployeeScreen:
+        name: 'deleteemployee'
+    SettingsScreen:
+        name: 'settings'
+    ExportScreen:
+        name: 'export'
+    BackgroundScreen:
+        name: 'background'
+
+<Loading>:
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.angle
+            axis: 0, 0, 1
+            origin: root.center
+    canvas.after:
+        PopMatrix
+    Image:
+        source: 'assets/loading.png'
+        size_hint: 1, 1
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+<HomeScreen>
+    id:home
+    RelativeLayout:
+        GridLayout:
+            cols:30
+            rows:1
+            col_default_width: 25
+            canvas:
+                Color:
+                    rgba: 0,0,0,.5
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            pos_hint: {'center_x': .5, 'center_y': .98}
+            size_hint: 1, .04
+            MDIcon:
+                id: on_raspberry
+                color: 1,1,1,1
+                size_hint_x: .1
+                icon: 'select-inverse'
+                opacity: .4
+            MDIcon:
+                id: on_camera
+                color: 1,1,1,1
+                size_hint_x: .1
+                icon: 'camera'
+                opacity: .4
+            MDIcon:
+                id: on_fingerprint
+                color: 1,1,1,1
+                size_hint_x: .1
+                icon: 'fingerprint'
+                opacity: .4
+            MDIcon:
+                id: on_database
+                color: 1,1,1,1
+                size_hint_x: .1
+                icon: 'server-network'
+                opacity: .4
+        MDFloatingActionButton:
+            id: home_sync_button
+            icon: "cached"
+            size_hint: 0,0
+            opposite_colors: True
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0,0,0,0.2
+            pos_hint: {"center_x": .9, "center_y": .92}
+            on_press:
+                app.root.transition = SlideTransition(duration=0.1, direction='left')
+                app.root.current = 'sync'
+            opacity: 0
+        MDLabel:
+            id: home_cpu_label
+            font_style: "Body1"
+            theme_text_color: "Primary"
+            text: ""
+            font_size: 20
+            color: 1,1,1,1
+            pos_hint: {"center_x": .45, "center_y": .93}
+            size_hint_x: .8
+        MDLabel:
+            id: home_user_temp_label
+            font_style: "Body1"
+            theme_text_color: "Primary"
+            text: ""
+            font_size: 20
+            color: 1,1,1,1
+            pos_hint: {"center_x": .60, "center_y": .93}
+            size_hint_x: .8        
+        MDLabel:
+            id: home_date_label
+            font_style: "Body1"
+            theme_text_color: "Primary"
+            text: ""
+            font_size: 24
+            color: 1,1,1,1
+            pos_hint: {"center_x": .5, "center_y": .82}
+            size_hint_x: .8
+        MDLabel:
+            id: home_time_label
+            font_style: "Body1"
+            theme_text_color: "Primary"
+            text: ""
+            font_size: 85
+            color: 1,1,1,1
+            pos_hint: {"center_x": .5, "center_y": .75}
+            size_hint_x: .8
+        Image:
+            id: home_camera
+            source: 'assets/trans.png'
+            pos_hint: {'center_x': .5, 'center_y': .47}
+            size_hint: 0.8, 0.8
+            #allow_stretch: True
+            size_hint_y: 0.5
+        MDRoundFlatIconButton:
+            icon: 'arrow-left-bold-circle-outline'
+            text: 'Numpad'
+            font_size: 40
+            size_hint: .58, .2
+            pos_hint: {'center_x': .3, 'center_y': .13}
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0,0,0,0.5
+            on_press:
+                #home.remove_camera()
+                app.root.transition = SlideTransition(duration=0.1, direction='right')
+                app.root.current = 'numpad'
+
+<NandeDownloadTwoLineAvatarIconListItem>
+    type: 'download'
+    BoxLayout:
+        id: _right_container
+        size_hint: .3, None
+        x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+        y: root.y + root.height/2 - self.height/2
+        size: dp(48), dp(48)
+
+        MDLabel:
+            text: 'Add to local'
+        MDIcon:
+            icon: 'download'
+
+<NandeUploadTwoLineAvatarIconListItem>
+    type: 'upload'
+    BoxLayout:
+        id: _right_container
+        size_hint: .3, None
+        x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+        y: root.y + root.height/2 - self.height/2
+        size: dp(48), dp(48)
+
+        MDIcon:
+            icon: 'cloud-upload'
+        MDLabel:
+            text: 'Add to server'
+
+<NandeNavigationBar@BoxLayout>
+    size_hint_y: .09
+    back_text: 'Back'
+    back_to: 'home'
+    name_text: ''
+    BoxLayout:
+        size_hint:1, 1
+        MDRectangleFlatIconButton:
+            id: sync_back_button
+            icon: 'arrow-left-bold-circle-outline'
+            text: root.back_text
+            size_hint: 0.22,1
+            font_size: 20
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0,0,0,0.5
+            on_press:
+                app.root.transition = NoTransition()
+                app.root.current = root.back_to
+        MDRectangleFlatButton:
+            text: root.name_text
+            size_hint: 0.75,1
+            font_size: 30
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0.12,0.40,1,0.8
+<ContentInputDialog>
+    orientation: 'vertical'
+    padding: dp(15)
+    spacing: dp(10)
+
+    MDLabel:
+        font_style: 'H6'
+        text: root.title
+        halign: 'left' if not root.device_ios else 'center'
+
+    BoxLayout:
+        id: box_input
+        size_hint: 1, None
+
+    Widget:
+    Widget:
+
+    MDSeparator:
+        id: sep
+
+    BoxLayout:
+        id: box_buttons
+        size_hint_y: None
+        height: dp(20)
+        padding: dp(20), 0, dp(20), 0
+
+<ListDownloadItemWithCheckbox>:
+    MyAvatar:
+        id: avatar
+        source: "assets/check.png"
+    MyCheckbox:
+        id: checkbox
+<ListUploadItemWithCheckbox>:
+    MyAvatar:
+        id: avatar
+        source: "assets/check.png"
+    MyCheckbox:
+        id: checkbox
+<SyncScreen>
+    id: sync
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    RelativeLayout:
+        Image:
+            id: sync_img
+            source: 'assets/smile.png'
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: .5,.5
+            opacity: 0
+        MDLabel:
+            id: sync_label
+            text: 'Your data is up to date.'
+            pos_hint: {'center_x': 0.7, 'center_y': .28}
+            color: 0,.8,.6,1
+            font_size: 28
+            opacity: 0
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        NandeNavigationBar:
+            back_text: 'Home'
+            back_to: 'home'
+            name_text: 'Sync Screen'
+        BoxLayout:
+            size_hint_y: .1
+            padding: 40,0,40,0
+            spacing: 20
+
+            MDLabel:
+                id: sync_instruction_label
+                text: 'Check to keep the items (max: 30 rows a time)'
+                color: 0,0,1,1
+                size_hint_x: .7
+            MDRoundFlatButton:
+                id: sync_button
+                text: "Sync"
+                pos_hint: {'center_x':.5, 'center_y':.5}
+                size_hint: (.25, .6)
+                font_size: 20
+                on_press: sync.onSyncClick()
+            MDSwitch:
+                id: sync_switch
+                size_hint_x: None
+                size: dp(36), dp(48)
+                active: True
+                on_active: sync.pressSw(self)
+
+        ScrollView:
+            size_hint: 1, 1
+            do_scroll_x: False
+            padding: 40,0,40,0
+
+            MDList:
+                id: sync_scroll
+                cols: 1
+                padding: dp(5)
+                size_hint_y: None
+
+<NumpadScreen>
+    id: numpad
+    keypress: ''
+    display: entry
+    GridLayout:
+        rows: 5
+        padding: 10
+        spacing: 5
+
+        BoxLayout:
+            padding: 90,5,90,5
+            size_hint_y: 1.35
+            MDTextField:
+                mode: "round"#yamaji
+                size_hint: 1,1
+                icon_left: 'key-variant'
+                normal_color: 1,1,1,1
+                hint_text: "4-Digit Passcode"
+                padding: [50,self.height / 2.0 - (self.line_height / 2.0) * len(self._lines)] #2023/10/13 fujiwara tuika
+                disabled: True
+                id: entry
+                font_size: 28
+                multiline: True
+                focus: False
+        BoxLayout:
+            spacing: 5
+            MDRectangleFlatButton:
+                text: "1"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "2"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "3"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+
+        BoxLayout:
+            spacing: 5
+            MDRectangleFlatButton:
+                text: "4"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "5"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "6"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+        BoxLayout:
+            spacing: 5
+            MDRectangleFlatButton:
+                text: "7"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "8"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "9"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+        BoxLayout:
+            spacing: 5
+            MDRectangleFlatButton:
+                size_hint: (1, 1)
+                font_size: 32
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                text: "clear"
+                on_press:
+                    entry.text = ""
+                    numpad.keypress = ""
+            MDRectangleFlatButton:
+                text: "0"
+                size_hint: (1, 1)
+                font_size: 50
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "submit"
+                size_hint: (1, 1)
+                font_size: 26
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press: numpad.enter(self.text)
+            MDRectangleFlatButton:
+                text: "MAIN"
+                size_hint: (1, 1)
+                font_size: 28
+                text_color: 1,1,1,1
+                md_bg_color: 0,0,0,0.5
+                on_press:
+                    entry.text = ""
+                    numpad.keypress = ""
+                    #numpad.add_camera()
+                    app.root.transition = SlideTransition(duration=0.1, direction='left')
+                    app.root.current = "home"
+
+<NandeTile>
+    source: ""
+    text: "default"
+    Image:
+        id: image
+        pos_hint: {'center_x':.5, 'center_y':.54}
+        size_hint: .7,.7
+        source: self.parent.source
+    MDLabel:
+        font_style: "Body1"
+        theme_text_color: "Primary"
+        text: self.parent.text
+        font_size: 20
+        pos_hint: {'center_x':.65, 'center_y':.12}
+<AdminScreen>
+    id: admin
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        id: bxx
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'numpad'
+            name_text: 'Main Menu'
+
+        ScrollView:
+            do_scroll_x: False
+
+            GridLayout:
+                cols: 2
+                rows: len(self.children)//self.cols+1
+                row_default_height:
+                    (self.width - self.cols*self.spacing[0])/self.cols
+                row_force_default: True
+                size_hint_y: None
+                padding: dp(4), dp(4)
+                spacing: dp(4)
+                height: self.minimum_height
+                NandeTile:
+                    source: "assets/add.png"
+                    text: "Register Employee"
+                    on_press:
+                        app.root.play('click')
+                        app.root.transition = NoTransition()
+                        app.root.current = 'r1'
+                        admin.clearRegister()
+
+                NandeTile:
+                    source: "assets/settings.png"
+                    text: "Settings"
+                    on_press:
+                        app.root.play('click')
+                        app.root.transition = NoTransition()
+                        app.root.current = 'settings'
+
+                NandeTile:
+                    source: "assets/delete.png"
+                    text: "Delete Employee"
+                    on_press:
+                        app.root.play('click')
+                        app.root.transition = NoTransition()
+                        app.root.current = 'deleteemployee'
+
+                NandeTile:
+                    source: "assets/usb.png"
+                    text: "Export to USB"
+                    on_press:
+                        app.root.play('click')
+                        app.root.transition = NoTransition()
+                        app.root.current = 'export'
+                
+                NandeTile:
+                    source: "assets/background.png"
+                    text: "Background Image"
+                    on_press:
+                        app.root.play('click')
+                        app.root.transition = NoTransition()
+                        app.root.current = 'background'
+
+<KeyboardButton@MDRoundFlatButton>
+    text: ""
+    size_hint: (1, 1)
+    font_size: 32
+    #radius: (10, 10) 
+    on_press:
+        app.root.play('click')
+
+<NumpadButton@MDRoundFlatButton>
+    size_hint: (1, 1)
+    font_size: 32
+    on_press:
+        app.root.play('click')
+
+<ProgressBox@AnchorLayout>
+    opr_prev: ''
+    opacity_prev: 1
+    opr_next: ''
+    opacity_next: 1
+    text: "Step 1"
+    anchor_x: 'center'
+    anchor_y: 'center'
+    pos_hint: {"center_x": .5, "center_y": .95}
+    size_hint: None,None
+    BoxLayout:
+        spacing: 20
+        size_hint: None,None
+        MDFloatingActionButton:
+            id: back_button
+            icon: "arrow-left"
+            opposite_colors: True
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0,0,0,0.4
+            opacity: root.opacity_prev
+            on_press: app.root.current = root.opr_prev
+        MDLabel:
+            text: root.text
+            color: 0,0,0,.3
+            size_hint: None,None
+        MDFloatingActionButton:
+            id: next_button
+            icon: "arrow-right"
+            opposite_colors: True
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0,0,0,0.4
+            opacity: root.opacity_next
+            on_press: app.root.current = root.opr_next
+<RegisterScreen>
+    id: r1
+    status: ''
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Registration'
+
+        RelativeLayout:
+            ProgressBox:
+                text: 'Step 1/5:  Name'
+                opr_next: 'r2'
+                opr_prev: 'r1'
+                opacity_prev: 0
+
+            MDTextField:
+                id: f1_name
+                hint_text: "Name"
+                font_size: 30
+                required: True
+                helper_text_mode: "on_error"
+                pos_hint: {"center_x": .5, "center_y": .83}
+                size_hint_x: .8
+                disabled: True
+                on_text: r1.checkNameSql(self.text)
+            MDLabel:
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: "Please enter your name. This name will be shown upon logging-in. Can be changed later. Up to 32 letters."
+                color: 0,0,0,.3
+                pos_hint: {"center_x": .5, "center_y": .71}
+                size_hint_x: .8
+            MDLabel:
+                id: f1_name_label
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: ""
+                font_size: 26
+                pos_hint: {"center_x": .5, "center_y": .61}
+                size_hint_x: .8
+            GridLayout:
+                #size_hint_x: .1   #2023/12/28 fujiwara 30 -> 10,30,70,3 tuika
+                size_hint_y: .6
+                keypress: ''
+                rows: 9   #2024/01/05 fujiwara 5 -> 9
+                padding: 30   #2023/12/28 fujiwara 30 -> 10,30,70,30
+                spacing: 5
+
+                BoxLayout:
+                    #size_hint_x: .1   #2023/12/28 fujiwara tuika
+                    size_hint_y: .7
+                    spacing: 5
+                    KeyboardButton:
+                        text: "1"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "2"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "3"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "4"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "5"
+                        on_press: r1.enterKey(self.text)
+                    
+                BoxLayout:   #2024/01/05 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "6"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "7"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "8"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "9"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "0"
+                        on_press: r1.enterKey(self.text)
+
+                BoxLayout:
+                    #size_hint_x: .1   #2023/12/28 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "Q"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "W"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "E"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "R"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "T"
+                        on_press: r1.enterKey(self.text)
+                    
+                BoxLayout:   #2024/01/05 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "Y"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "U"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "I"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "O"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "P"
+                        on_press: r1.enterKey(self.text)
+
+                BoxLayout:
+                    #size_hint_x: .1   #2023/12/28 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "A"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "S"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "D"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "F"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "G"
+                        on_press: r1.enterKey(self.text)
+                    
+                BoxLayout:   #2024/01/05 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "H"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "J"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "K"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "L"
+                        on_press: r1.enterKey(self.text)
+
+                BoxLayout:
+                    #size_hint_x: .1   #2023/12/28 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "("
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "Z"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "X"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "C"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "V"
+                        on_press: r1.enterKey(self.text)
+                    
+                BoxLayout:   #2024/01/05 fujiwara tuika
+                    spacing: 5
+                    KeyboardButton:
+                        text: "B"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "N"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "M"
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: ")"
+                        on_press: r1.enterKey(self.text)
+
+                BoxLayout:
+                    #size_hint_x: .1   #2023/12/28 fujiwara tuika
+                    size_hint_y: .8
+                    spacing: 5
+                    KeyboardButton:
+                        text: "Clear"
+                        size_hint_x: .7
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: " "
+                        on_press: r1.enterKey(self.text)
+                    KeyboardButton:
+                        text: "BackSpc"
+                        size_hint_x: .7
+                        font_size: 20
+                        on_press: r1.enterKey(self.text)
+<RegisterScreen2>
+    id: r2
+    status: ''
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Registration'
+
+        RelativeLayout:
+
+            ProgressBox:
+                text: 'Step 2/5: Passcode'
+                opr_next: 'r3'
+                opr_prev: 'r1'
+
+            GridLayout:
+                keypress: ''
+                rows: 6
+                padding: 30
+                spacing: 10
+                BoxLayout:
+                    size_hint_y: 2.5
+                    RelativeLayout:
+                        MDFillRoundFlatIconButton:
+                            id: passcode_field1
+                            num: ""
+                            text: ""
+                            disabled: True
+                            canvas.before:
+                                # Color:
+                                #     rgba: self.text_color
+                                Line:
+                                    width: 1
+                                    rounded_rectangle:
+                                        (self.x, self.y, self.width, self.height,\
+                                        16,16,16,16,16)
+                            _sizeX: .8
+                            _sizeY: .4
+                            _posY: .4
+                            _posX: .5
+                            size_hint: self._sizeX,self._sizeY
+                            pos_hint:{"center_x":self._posX,"center_y":self._posY}
+                            icon: 'key'
+                            md_bg_color: (1,1,1,.8)
+                            text_color: (.3,.3,1,1)
+                            font_size: 30
+                        MDFillRoundFlatIconButton:
+                            id: passcode_field2
+                            num: ""
+                            text: ""
+                            disabled: True
+                            canvas.before:
+                                # Color:
+                                #     rgba: self.text_color
+                                Line:
+                                    width: 1
+                                    rounded_rectangle:
+                                        (self.x, self.y, self.width, self.height,\
+                                        16,16,16,16,16)
+                            _sizeX: .3
+                            _sizeY: .15
+                            _posY: .05
+                            _posX: .8
+                            size_hint: self._sizeX,self._sizeY
+                            pos_hint:{"center_x":self._posX,"center_y":self._posY}
+                            icon: 'key'
+                            md_bg_color: (1,1,1,0)
+                            text_color: (0,0,0,.2)
+                            font_size: 30
+                BoxLayout:
+                    size_hint_y: 0.7
+                    MDLabel:
+                        id: mlabel
+                        font_size: 24
+                        color: .3,.3,1,1
+                        text: 'Please enter 4-digit passcode'
+                        halign: 'center'
+
+                BoxLayout:
+                    spacing: 10
+                    NumpadButton:
+                        text: "1"
+                        on_press: r2.enter('1')
+                    NumpadButton:
+                        text: "2"
+                        on_press: r2.enter('2')
+                    NumpadButton:
+                        text: "3"
+                        on_press: r2.enter('3')
+                BoxLayout:
+                    spacing: 10
+                    NumpadButton:
+                        text: "4"
+                        on_press: r2.enter('4')
+                    NumpadButton:
+                        text: "5"
+                        on_press: r2.enter('5')
+                    NumpadButton:
+                        text: "6"
+                        on_press: r2.enter('6')
+                BoxLayout:
+                    spacing: 10
+                    NumpadButton:
+                        text: "7"
+                        on_press: r2.enter('7')
+                    NumpadButton:
+                        text: "8"
+                        on_press: r2.enter('8')
+                    NumpadButton:
+                        text: "9"
+                        on_press: r2.enter('9')
+                BoxLayout:
+                    spacing: 10
+                    NumpadButton:
+                        id: back_button
+                        text: "Clear"
+                        on_press: r2.enter('back')
+                    NumpadButton:
+                        text: "0"
+                        on_press: r2.enter('0')
+                    NumpadButton:
+                        id: backspace_button
+                        text: "<-"
+                        on_press: r2.enter('<-')
+<RegisterScreen3>
+    id: r3
+    status: ''
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        spacing: '10dp'
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Registration'
+
+        RelativeLayout:
+
+            ProgressBox:
+                text: 'Step 3/5: Picture'
+                opr_next: 'r4'
+                opr_prev: 'r2'
+
+            MDLabel:
+                id: photo_switch_label
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: "Enable Face-Recognition?"
+                _x: .81
+                _y: .55
+                pos_hint: {"center_x": self._x, "center_y": self._y}
+
+            MDSwitch:
+                id: photo_switch
+                size_hint: None, None
+                size: dp(36), dp(48)
+                _x: .5
+                _y: .5
+                pos_hint: {"center_x": self._x, "center_y": self._y}
+                on_active: r3.photoSwitchOn(self.active)
+
+            Image:
+                id: register_camera
+                source: ''
+                pos_hint: {"center_x": .5, "center_y": .62}
+                size_hint: .6,.6
+                allow_strech: True
+                opacity: 0
+
+            MDLabel:
+                id: register_camera_label
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                pos_hint: {'center_y': .36}
+                halign: 'center'
+                text: ""
+                color: .3,.3,1,1
+                font_size: 28
+                opacity: 0
+
+            MDRoundFlatButton:
+                id: retake_button
+                text: 'Retake'
+                pos_hint: {'center_x': .5, 'center_y': .25}
+                size_hint: .6,.1
+                font_size: 30
+                opacity: 0
+                disabled: True if self.opacity == 0 else False
+                on_press:
+                    self.opacity = 0
+                    r3.retake()
+
+            MDRoundFlatButton:
+                id: next_button
+                text: 'Next'
+                pos_hint: {'center_x': .5, 'center_y': .1}
+                size_hint: .6,.1
+                font_size: 30
+                opacity: 0
+                disabled: True if self.opacity == 0 else False
+                on_press:
+                    self.opacity = 0
+                    r3.next()
+<RegisterScreen4>
+    id: r4
+    status: ''
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Registration'
+
+        RelativeLayout:
+
+            ProgressBox:
+                text: 'Step 4/5: Fingerprint'
+                opr_next: 'r5'
+                opr_prev: 'r3'
+
+            MDLabel:
+                id: fingerprint_switch_label
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: "Enable Fingerprint?"
+                _x: .86
+                _y: .55
+                pos_hint: {"center_x": self._x, "center_y": self._y}
+            MDSwitch:
+                id: fingerprint_switch
+                size_hint: None, None
+                size: dp(36), dp(48)
+                _x: .5
+                _y: .5
+                pos_hint: {"center_x": self._x, "center_y": self._y}
+                on_active: r4.fingerprintSwitchOn(self.active)
+
+            Image:
+                id: fingerprint_img
+                source: 'assets/fingerprint_img.png'
+                pos_hint: {"center_x": .5, "center_y": .64}
+                allow_strech: True
+                opacity: 0
+            MDLabel:
+                id: register_fingerprint_label
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                pos_hint: {'center_y': .43}
+                halign: 'center'
+                text: "Waiting for fingerprint..."
+                color: .2,.65,.9,1
+                font_size: 28
+                opacity: 0
+            MDLabel:
+                id: register_fingerprint_label2
+                font_style: "Body2"
+                theme_text_color: "Primary"
+                pos_hint: {'center_y': .35}
+                halign: 'center'
+                text: "Place your finger on the fingerprint module.\n The fingerprint of the same finger is acquired three times.\n Once the finger is placed, do not move to it until the success screen appears!"   #2024/01/10 fujiwara  "Press your finger on the fingerprint module\n total up to 10 fingers"
+                color: .5,.5,.5,1
+                font_size: 16
+                opacity: 0
+            MDRoundFlatButton:
+                id: fingerprint_reset_button
+                text: 'Reset'
+                pos_hint: {'center_x': .5, 'center_y': .2}
+                size_hint: .6,.2
+                font_size: 30
+                opacity: 0
+                disabled: True if self.opacity == 0 else False
+                on_press: r4.clear_press()
+<RegisterScreen5>
+    id: r5
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Registration'
+
+        RelativeLayout:
+
+            ProgressBox:
+                text: 'Step 5/5: Save'
+                opr_next: 'r5'
+                opr_prev: 'r4'
+                opacity_next: 0
+
+            GridLayout:
+                pos_hint: {'center_x':.5, 'center_y':.41}
+                rows: 5
+                padding: 100,30,100,700   #2023/12/28 fujiwara 100,30,100,300 -> 100,30,100,700
+                MDLabel:
+                    font_style: 'Body1'
+                    theme_text_color: "Primary"
+                    font_size: 28
+                    text: 'Confirmation'
+                    halign: 'center'
+                BoxLayout:
+                    MDLabel:
+                        id: c1_label
+                        font_style: "Body1"
+                        theme_text_color: "Primary"
+                        font_size: 20
+                        text: ''
+                        color: (0,1,0,1) if c1.source == 'assets/check.png' else (1,0,0,1)
+                        valign: 'center'
+                    Image:
+                        id: c1
+                        source: ''
+                        valign: 'center'
+                        size_hint_x: .3
+                BoxLayout:
+                    MDLabel:
+                        font_style: "Body1"
+                        theme_text_color: "Primary"
+                        font_size: 20
+                        text: 'Passcode:  ****' if c2.source == 'assets/check.png' else 'Passcode is required!'
+                        color: (0,1,0,1) if c2.source == 'assets/check.png' else (1,0,0,1)
+                        valign: 'center'
+                    Image:
+                        id: c2
+                        source: ''
+                        valign: 'center'
+                        size_hint_x: .3
+                BoxLayout:
+                    MDLabel:
+                        font_style: "Body1"
+                        theme_text_color: "Primary"
+                        font_size: 20
+                        text: 'Photo OK!' if c3.source == 'assets/check.png' else 'Warning: Photo not registerd'
+                        color: (0,.9,.1,1) if c3.source == 'assets/check.png' else (.9,.9,0,1)
+                        valign: 'center'
+                    Image:
+                        id: c3
+                        source: ''
+                        valign: 'center'
+                        size_hint_x: .3
+                BoxLayout:
+                    MDLabel:
+                        font_style: "Body1"
+                        theme_text_color: "Primary"
+                        font_size: 20
+                        text: 'Fingerprint OK!' if c4.source == 'assets/check.png' else 'Warning: Fingerprint not registerd'
+                        color: (0,.9,.1,1) if c4.source == 'assets/check.png' else (.9,.9,0,1)
+                        valign: 'center'
+                    Image:
+                        id: c4
+                        source: ''
+                        valign: 'center'
+                        size_hint_x: .3
+
+            MDRectangleFlatButton:
+                id: register_save_button
+                text: 'Save'
+                pos_hint: {'center_x': .5, 'center_y': .2}
+                size_hint: .6,.18
+                font_size: 30
+                opacity: 1
+                disabled: True if c1.source == 'assets/remove.png' or c2.source == 'assets/remove.png' or c3.source == 'assets/remove.png' or c4.source == 'assets/remove.png' else False
+                on_press: r5.save()
+
+<DeleteEmployeeScreen>
+    id: deleteemployee
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Delete Employee'
+        BoxLayout:
+            orientation: "vertical"
+            BoxLayout:
+                id: search_box
+                size_hint_y: .15
+                padding: 40,0,40,20
+                current_color: (0,0,0,.1)
+                MDTextField:
+                    id: search_field
+                    text: ''
+                    pos_hint: {"center_x": .5, "center_y": .2}
+                    canvas.before:
+                        Color:
+                            rgba: self.parent.current_color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x-20, self.y+5, self.width+70, self.height, 25,25,25,25,25)
+                    hint_text: 'Search employee..'
+                    on_focus: deleteemployee.searchChangeColor()
+                    on_text: deleteemployee.queryName(self.text)
+                MDIcon:
+                    color: (0,0,0,.1)
+                    size_hint_x: .1
+                    pos_hint: {"center_y": .2, 'right': 1}
+                    halign: 'right'
+                    icon: 'magnify'
+            ScrollView:
+                id: scroll
+                #size_hint: 1, 1
+                do_scroll_x: False
+                padding: 40,0,40,0
+                GridLayout:
+                    id: grid_card
+                    cols: 1
+                    padding: dp(5)
+                    size_hint_y:None
+                    height: self.minimum_height
+        
+<NandeCardPost>
+    spacing: dp(5)
+    padding: dp(20)            #korn 11.30 add
+    orientation: 'vertical'
+    size_hint: root.size_hint
+    size: root.card_size
+    left_font_size: dp(18)
+    right_font_size: dp(12)
+    
+    FloatLayout:
+        BoxLayout:
+            id: root_box
+            spacing: dp(5)
+            pos_hint: {'top': .4}
+            orientation: 'vertical'
+            x: dp(10)
+            BoxLayout:
+                padding: dp(5),0,dp(5),0
+                size_hint_x: .96
+                id: title_box
+                size_hint_y: None
+                height: root.size[1] - 10
+                spacing: dp(15)
+
+                IconLeftWidget:
+                    #source: root.path_to_avatar
+                    icon: root.path_to_avatar
+                    icon_size: 55   #2024/01/18 fujiwara tuika
+                    #size_hint_x: None
+                    #width: self.height
+                    allow_stretch: True
+
+                MDLabel:
+                    markup: True
+                    text: root.name_data
+                    text_size: self.width, None
+                    theme_text_color: 'Primary'
+                    bold: True
+                    font_size: root.left_font_size
+                    pos_hint: {'left': 0.8}
+
+                MDLabel:
+                    id: text_post
+                    text: root.text_post
+                    markup: True
+                    font_size: root.right_font_size
+                    color: 0,0,0,.4
+                    size_hint_y: None
+                    halign: 'right'
+                    height: self.texture_size[1]
+                
+                MDIcon:
+                    size_hint_x: 0.3
+                    icon: 'backburger'
+                    color: 0,0,0,0.2
+            Widget:
+            MDSeparator:
+                id: sep
+                height: dp(1)
+        AnchorLayout:
+            id: box_delete_post_button
+            size_hint: None, None
+            size: dp(90), root.height + dp(-130) #korn 11.30 root.height - dp(15)
+            pos_hint: {'top': -0.4, 'right': 1}  #korn 12.4  top:-0.2 => -0.4
+            anchor_x: 'center'
+            opacity: 0
+
+            canvas.before:
+                Color:
+                    rgba: .9,.2,.2,1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            canvas.after:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: f'{images_path}swipe_shadow.png'
+
+            MDIconButton:
+                id: delet_post_button
+                size_hint: None, None
+                size: dp(56), dp(56)
+                icon: 'delete'
+                disabled: True
+                on_release: root.callback(root, None)
+
+<BoxContentForBottomSheetCustomScreenList>
+    id: boxcontent
+    orientation: "vertical"
+    padding: dp(10)
+    spacing: dp(10)
+    size_hint:1, None#size_hint_y: None
+    height: dp(600)
+    pos_hint: {"top": 1}
+
+    ScrollView:
+        GridLayout:
+            id: box
+            size_hint:1, None#size_hint_y: None
+            height: self.minimum_height
+            cols: 1
+            OneLineListItem:
+                disabled: True
+                text: "Choose your time zone"
+<ContentForBottomSheetCustomScreenList>
+    text: "Time zone"
+    secondary_text: "Example zone name"
+    gmt_offset: ''
+    gmt_code: ''
+    on_press: self.callback_for_menu_items(self)   #2023/10/24 fujiwara tuika ()->(self)
+    IconLeftWidget:
+        icon: "web"
+              
+<DateTimeContent>
+    adaptive_height: True
+    orientation: "vertical"
+    id: dtcontent
+    padding: dp(20),0,dp(20),dp(20)
+    size_hint:1, None#size_hint_y: None
+    height: self.minimum_height
+
+    # BoxLayout:
+    #     orientation: "vertical"
+    TwoLineListItem:
+        text: "Use Global Time"
+        secondary_text: "Recommended"
+        BoxLayout:
+            size_hint: None, None
+            x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+            y: self.parent.y
+            size: dp(70), dp(48)
+            MDSwitch:
+                id: global_time_switch
+                size_hint: None, None
+                size: dp(36), dp(48)
+                active: True
+                on_active: dtcontent.pressSw('global', self.active)
+    TwoLineIconListItem:
+        id: set_time_zone
+        text: "GMT+7:00 Bangkok"
+        secondary_text:'Choose time zone'
+        disabled: False if global_time_switch.active else True
+        on_press: root.show_global_time_picker()
+        IconLeftWidget:
+            icon: "web"
+
+    TwoLineListItem:
+        text: "Use Local Time"
+        secondary_text: "Set time manually"
+        BoxLayout:
+            size_hint: None, None
+            x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+            y: self.parent.y
+            size: dp(70), dp(48)
+            MDSwitch:
+                id: local_time_switch
+                size_hint: None, None
+                size: dp(36), dp(48)
+                active: False
+                on_active: dtcontent.pressSw('local', self.active)
+    TwoLineIconListItem:
+        id: set_date
+        text: "Feb 08 2020"
+        secondary_text:'Choose date'
+        disabled: False if local_time_switch.active else True
+        on_press: root.show_example_date_picker()
+        IconLeftWidget:
+            icon: "calendar"
+    TwoLineIconListItem:
+        id: set_clock
+        text: "00:00"
+        secondary_text:'Choose time'
+        disabled: False if local_time_switch.active else True
+        on_press: root.show_example_time_picker()
+        IconLeftWidget:
+            icon: "clock"
+
+<DisableEnableContent>
+    id: decontent
+    orientation: "vertical"
+    padding: dp(20),0,dp(20),dp(20)
+    size_hint_y: None
+    #size_hint: .1, None
+    height: self.minimum_height
+
+    TwoLineListItem:
+        text: "Enable Camera"
+        BoxLayout:
+            size_hint: None, None
+            x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+            y: self.parent.y
+            size: dp(70), dp(48)
+            MDSwitch:
+                id: setting_camera_switch
+                size_hint: None, None
+                size: dp(36), dp(48)
+                active: True
+                on_active: decontent.pressSw('camera', self.active)
+    TwoLineListItem:
+        text: "Enable Fingerprint Scanner"
+        BoxLayout:
+            size_hint: None, None
+            x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+            y: self.parent.y
+            size: dp(70), dp(48)
+            MDSwitch:
+                id: setting_fingerprint_switch
+                size_hint: None, None
+                size: dp(36), dp(48)
+                active: True
+                on_active: decontent.pressSw('fingerprint', self.active)
+<VolumeContent>
+    id: vocontent
+    orientation: "vertical"
+    padding: dp(20),0,dp(20),dp(20)
+    size_hint: 1, None#size_hint_y: None
+    height: self.minimum_height
+
+    TwoLineListItem:
+        BoxLayout:
+            size_hint: None, None
+            x: root.x + root.width - m_res.HORIZ_MARGINS - self.width
+            y: self.parent.y
+            size: dp(70), dp(48)
+        MDSlider:
+            id: volume_slider
+            min: 0
+            max: 100
+            value: 20
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint_x: .8
+            color: "red"                #2023/10/17 fujiwara tuika
+            hint: True                  #2023/10/17 fujiwara tuika
+            hint_bg_color: "red"        #2023/10/17 fujiwara tuika
+            hint_text_color: "white"    #2023/10/17 fujiwara tuika
+<SettingsScreen>
+    id: settings
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Settings'
+        ScrollView:
+            id: settings_scroll
+            #do_scroll_x: False 
+            MDGridLayout:
+                id: settings_grid
+                cols: 1
+                #padding: dp(5)
+                adaptive_height: True
+                #size_hint:1, None#size_hint_y: None
+        #         #MDExpansionPanel:
+                # MDExpansionPanelOneLine:
+                #     id: dtex
+                #     padding: 18,0,18,0
+                #     #icon: "assets/mono_clock.png"
+                #     content: DateTimeContent()
+                #     text: "Date and Time"
+                #     IconLeftWidget:
+                #         icon: 'assets/mono_clock.png'
+        #         MDExpansionPanelOneLine:
+        #             id: deex
+        #             padding: 18,0,18,0
+        #             content: DisableEnableContent()
+        #             text: "Disable/Enable module"
+        #             #icon:'assets/disabled.png'
+        #             IconLeftWidget:
+        #                 icon:'assets/disabled.png'
+        #         MDExpansionPanelOneLine:
+        #             id: voex
+        #             padding: 18,0,18,0
+        #             #content: VolumeContent()
+        #             content: DisableEnableContent()
+        #             text: "Speaker Volume"
+        #             #icon:'assets/speaker.png'
+        #             IconLeftWidget:
+        #                 icon:'assets/speaker.png'
+
+<ExportScreen>
+    id: export
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Export Files'
+        RelativeLayout:
+            MDLabel:
+                id: export_l1
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: "Step 1 Waiting for USB drive.. "
+                color: 0,0,1,1
+                font_size: 20
+                pos_hint: {"center_x": .5, "center_y": .8}
+                size_hint_x: .8
+            MDLabel:
+                id: export_l2
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: "Step2 Transfering data.. "
+                color: 0,0,0,.3
+                font_size: 20
+                pos_hint: {"center_x": .5, "center_y": .7}
+                size_hint_x: .8
+            MDLabel:
+                id: export_l3
+                font_style: "Body1"
+                theme_text_color: "Primary"
+                text: "Step3 Finish Safe to pull off"
+                color: 0,0,0,.3
+                font_size: 20
+                pos_hint: {"center_x": .5, "center_y": .6}
+                size_hint_x: .8
+            Image:
+                id: export_img
+                source: 'assets/export_usb.png'
+                size_hint: .7,.7
+                pos_hint: {"center_x": .55, "center_y": .4}
+
+<BgTile>
+    size_hint:1, None#size_hint_y: None
+    height: "240dp"
+<BackgroundScreen>
+    id: background
+    canvas:
+        Color:
+            rgba: app.theme_cls.bg_normal
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        orientation: "vertical"
+        NandeNavigationBar:
+            back_to: 'admin'
+            name_text: 'Background'
+        ScrollView:
+            do_scroll_x: False
+            GridLayout:
+                id: background_grid
+                cols: 4
+                height: self.minimum_height #2023/10/12 hujiwara tuika
+                size_hint_y: None #2023/10/12 hujiwara tuika
+                padding: dp(4), dp(4)
+                spacing: dp(4)
+
+

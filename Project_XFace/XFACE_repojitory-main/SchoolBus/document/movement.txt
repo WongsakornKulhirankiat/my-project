@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/tkinter/__init__.py", line 1892, in __call__
+    return self.func(*args)
+  File "/home/guest/.local/lib/python3.8/site-packages/customtkinter/windows/widgets/ctk_button.py", line 554, in _clicked
+    self._command()
+  File "/home/guest/SchoolBus/XFace_Date_Setting.py", line 39, in <lambda>
+    ok_btn =customtkinter.CTkButton(master=self.date_frame, text="OK", command= lambda: self.next_screen(5), text_color="black", font=("Arial", 15, "bold"), fg_color="white", width=90, height=50, corner_radius=10, border_width=0, hover_color="gray", cursor="hand2")
+  File "/home/guest/SchoolBus/XFace_Date_Setting.py", line 43, in next_screen
+    self.main_app.show_next_screen(index)
+  File "/home/guest/SchoolBus/main.py", line 126, in show_next_screen
+    self.screen5.get_year()
+AttributeError: 'Screen5' object has no attribute 'get_year'

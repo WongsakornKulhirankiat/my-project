@@ -1,0 +1,18 @@
+
+s_format = "%H:%M"
+s1 = "8:00"
+dt1 = datetime.strptime(s1, s_format)
+s2 = "17:45"
+dt2 = datetime.strptime(s2, s_format)
+print(dt1,dt2)
+
+asc = dt2 - dt1
+print(asc)
+print(asc.total_seconds())
+actuallytime = (asc.total_seconds() / 3600) -1
+print(actuallytime)
+print(round(actuallytime, 2))
+
+C:\Users\User\Desktop\XFACE\kornさん作成物確認\画面設計書を元にアプリ画面の作成\20240517
+
+20240529時点のショウ君作業ファイル

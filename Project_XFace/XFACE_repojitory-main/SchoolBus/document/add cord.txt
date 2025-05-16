@@ -1,0 +1,205 @@
+###main.py###
+## Add fujiwara
+### subprocess settings #################
+from multiprocessing import Process, Value
+import BusCamera
+
+## Add fujiwara
+import daomodule
+dbaccess = daomodule.SchoolbusDAO()
+
+class MainApp:
+    def __init__(self):
+        self.root.geometry("1024x600")   #Add fujiwara 600x500 -> 1024x600
+        self.root.overrideredirect(True)   #Add fujiwara
+
+        ## Add fujiwara
+        self.recognitionlist = BusCamera.recognitionlist
+
+    ## Add fujiwara    
+    def limit_char1(self,string):
+        return len(string) <= 1
+    
+    def limit_char2(self,string):
+        return len(string) <= 2
+
+    def limit_char6(self,string):
+        return len(string) <= 6
+    
+    def limit_char20(self,string):
+        return len(string) <= 20
+    
+    def limit_char50(self,string):
+        return len(string) <= 50
+
+    def Keybord(self,event):
+        self.widgetinfo = ""
+        self.widgetinfo = event.widget
+        if self.keybord:
+            self.keybord = False
+            self.upper = False
+            frame_Keybord = tk.Frame(self, bg="blue")
+            frame_Keybord.pack(pady=10)
+            
+            ##1~0#
+            ctk.CTkButton(frame_Keybord, text="1",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("1")).grid(row=0,column=0)
+            ctk.CTkButton(frame_Keybord, text="2",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("2")).grid(row=0,column=1)
+            ctk.CTkButton(frame_Keybord, text="3",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("3")).grid(row=0,column=2)
+            ctk.CTkButton(frame_Keybord, text="4",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("4")).grid(row=0,column=3)
+            ctk.CTkButton(frame_Keybord, text="5",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("5")).grid(row=0,column=4)
+            ctk.CTkButton(frame_Keybord, text="6",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("6")).grid(row=0,column=5)
+            ctk.CTkButton(frame_Keybord, text="7",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("7")).grid(row=0,column=6)
+            ctk.CTkButton(frame_Keybord, text="8",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("8")).grid(row=0,column=7)
+            ctk.CTkButton(frame_Keybord, text="9",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("9")).grid(row=0,column=8)
+            ctk.CTkButton(frame_Keybord, text="0",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("0")).grid(row=0,column=9)
+
+            #q~p
+            ctk.CTkButton(frame_Keybord, text="q",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("q")).grid(row=1,column=0)
+            ctk.CTkButton(frame_Keybord, text="w",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("w")).grid(row=1,column=1)
+            ctk.CTkButton(frame_Keybord, text="e",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("e")).grid(row=1,column=2)
+            ctk.CTkButton(frame_Keybord, text="r",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("r")).grid(row=1,column=3)
+            ctk.CTkButton(frame_Keybord, text="t",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("t")).grid(row=1,column=4)
+            ctk.CTkButton(frame_Keybord, text="y",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("y")).grid(row=1,column=5)
+            ctk.CTkButton(frame_Keybord, text="u",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("u")).grid(row=1,column=6)
+            ctk.CTkButton(frame_Keybord, text="i",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("i")).grid(row=1,column=7)
+            ctk.CTkButton(frame_Keybord, text="o",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("o")).grid(row=1,column=8)
+            ctk.CTkButton(frame_Keybord, text="p",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("p")).grid(row=1,column=9)
+
+            #a~-
+            ctk.CTkButton(frame_Keybord, text="a",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("a")).grid(row=2,column=0)
+            ctk.CTkButton(frame_Keybord, text="s",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("s")).grid(row=2,column=1)
+            ctk.CTkButton(frame_Keybord, text="d",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("d")).grid(row=2,column=2)
+            ctk.CTkButton(frame_Keybord, text="f",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("f")).grid(row=2,column=3)
+            ctk.CTkButton(frame_Keybord, text="g",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("g")).grid(row=2,column=4)
+            ctk.CTkButton(frame_Keybord, text="h",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("h")).grid(row=2,column=5)
+            ctk.CTkButton(frame_Keybord, text="j",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("j")).grid(row=2,column=6)
+            ctk.CTkButton(frame_Keybord, text="k",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("k")).grid(row=2,column=7)
+            ctk.CTkButton(frame_Keybord, text="l",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("l")).grid(row=2,column=8)
+            ctk.CTkButton(frame_Keybord, text="-",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("-")).grid(row=2,column=9)
+
+            #z~大文字化
+            ctk.CTkButton(frame_Keybord, text="z",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("z")).grid(row=3,column=0)
+            ctk.CTkButton(frame_Keybord, text="x",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("x")).grid(row=3,column=1)
+            ctk.CTkButton(frame_Keybord, text="c",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("c")).grid(row=3,column=2)
+            ctk.CTkButton(frame_Keybord, text="v",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("v")).grid(row=3,column=3)
+            ctk.CTkButton(frame_Keybord, text="b",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("b")).grid(row=3,column=4)
+            ctk.CTkButton(frame_Keybord, text="n",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("n")).grid(row=3,column=5)
+            ctk.CTkButton(frame_Keybord, text="m",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("m")).grid(row=3,column=6)
+            #ctk.CTkButton(frame_Keybord, text="⇧", height=50,width=150, fg_color="gray", command=self.KeybordUpper).grid(row=3,column=7, columnspan=3)
+            self.button_keybord = ctk.CTkButton(frame_Keybord, text="⇧", height=50,width=150, fg_color="gray", command=self.KeybordUpper)
+            self.button_keybord.grid(row=3,column=7, columnspan=3)
+              
+            #close~delete
+            ctk.CTkButton(frame_Keybord, text="close",height=50,width=100,fg_color="gray", command=lambda:self.KeybordDestroy(frame_Keybord)).grid(row=4,column=1, columnspan=2)
+            ctk.CTkButton(frame_Keybord, text="clear", height=50,width=100, fg_color="gray", command=lambda:self.KeybordGet("clear")).grid(row=4,column=3, columnspan=2)
+            ctk.CTkButton(frame_Keybord, text="space", height=50,width=100, fg_color="gray", command=lambda:self.KeybordGet(" ")).grid(row=4,column=5, columnspan=2)
+            ctk.CTkButton(frame_Keybord, text="del", height=50,width=100, fg_color="gray", command=lambda:self.KeybordGet("delete")).grid(row=4,column=7, columnspan=2)
+                
+    def MathKeybord(self, event):
+        self.widgetinfo = ""
+        self.widgetinfo = event.widget
+        if self.mathkeybord:
+            self.mathkeybord = False
+            frame_mathKeybord = tk.Frame(self, bg="blue")
+            frame_mathKeybord.pack(pady=10)
+            
+            ctk.CTkButton(frame_mathKeybord, text="1",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("1")).grid(row=0,column=0)
+            ctk.CTkButton(frame_mathKeybord, text="2",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("2")).grid(row=0,column=1)
+            ctk.CTkButton(frame_mathKeybord, text="3",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("3")).grid(row=0,column=2)
+            ctk.CTkButton(frame_mathKeybord, text="4",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("4")).grid(row=1,column=0)
+            ctk.CTkButton(frame_mathKeybord, text="5",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("5")).grid(row=1,column=1)
+            ctk.CTkButton(frame_mathKeybord, text="6",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("6")).grid(row=1,column=2)
+            ctk.CTkButton(frame_mathKeybord, text="7",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("7")).grid(row=2,column=0)
+            ctk.CTkButton(frame_mathKeybord, text="8",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("8")).grid(row=2,column=1)
+            ctk.CTkButton(frame_mathKeybord, text="9",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("9")).grid(row=2,column=2)
+            ctk.CTkButton(frame_mathKeybord, text="clear",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("clear")).grid(row=3,column=0)
+            ctk.CTkButton(frame_mathKeybord, text="0",height=50,width=50, fg_color="gray", command=lambda:self.KeybordGet("0")).grid(row=3,column=1)
+            ctk.CTkButton(frame_mathKeybord, text="close", height=50,width=50, fg_color="gray", command=lambda:self.KeybordDestroy(frame_mathKeybord)).grid(row=3,column=2)      
+
+    def KeybordDestroy(self,kybord):
+        self.keybord = True
+        self.mathkeybord = True
+        kybord.destroy()
+
+    def KeybordGet(self,value):
+        if value == "clear":
+            self.widgetinfo.delete(0,tk.END)
+        elif value == "delete":
+            entryvalue = self.widgetinfo.get()
+            length = len(entryvalue)-1
+            self.widgetinfo.delete(length,tk.END)
+        elif self.upper:
+            value = value.upper()
+            self.widgetinfo.insert(tk.END,value)
+        else:
+            self.widgetinfo.insert(tk.END,value)
+
+    def KeybordUpper(self):
+        if self.upper:
+            self.upper = False
+            self.button_keybord.configure(fg_color="gray")            
+        else:
+            self.upper = True
+            self.button_keybord.configure(fg_color="white")
+
+    ## Add fujiwara
+    def set_password(self,newpassowrd):
+        self.password = newpassowrd
+
+    def get_password(self):
+        self.password = dbaccess.getAdminInfo_Pass()
+
+    def show_next_screen(self, index):   
+        # Hide the current screen
+        elif self.current_screen == 11:
+            #BusCamera.remove_camera(cap)   ## Add fujiwara
+            self.__del__()   ## Add fujiwara
+            self.screen11.grid_remove()
+
+        # Show the next screen
+        elif index == 11:
+            self.current_screen = index
+            self.screen11.update_grid()
+            self.SubProcess = Process(target=BusCamera.main)  ### important main() -> main   ## Add fujiwara
+            self.SubProcess.start()   ## Add fujiwara
+            self.screen11.grid(row=0, column=0, sticky="nsew")
+
+    ## Add fujiwara
+    def __del__(self):
+        print("killing me")
+        self.SubProcess.terminate()
+        self.SubProcess.join()
+        self.SubProcess.close()
+
+if __name__ == "__main__":
+    app = MainApp()
+    app.root.mainloop()
+    #app.__del__()   ## Add fujiwara
+
+#####################################################################################################################
+
+###XFace_Ride_Management_Screen.py###
+
+
+#####################################################################################################################
+
+
+###BusCamera.py###
+
+### subprocess settings #################
+## Add fujiwara
+from multiprocessing import Process, Value, Manager
+
+recognitionlist = Manager().list()   ## Add fujiwara
+
+def main():
+    try:        
+        while True:
+            ### Save images and perform facial recognition
+            if cap is not None:
+                result = save_and_recognition(cap)
+                if result != "":
+                    print('Hello, ' + result)
+                    recognitionlist.append(result)   ### Add fujiwara
+
+

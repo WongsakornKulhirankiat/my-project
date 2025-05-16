@@ -1,0 +1,71 @@
+[Required Module]
+-Python3
+-Tkinter
+-Customtkinter
+
+[Installation]
+1.Install the required modules then copy XFace Folder to /bin directory
+2.open Terminal and use GNU nano to create startup service 'sudo nano /etc/systemd/system/myapp.service' (myapp can be renamed Ex. 'XFace.service')
+3.in GNU nano use the following script and replace 'Application Name Here' with your Application Name & 'FolderName' with XFace Folder Name & 'username' with current user
+
+[Unit]
+Description=XFace
+After=network.target
+
+[Service]
+ExecStart= /usr/bin/python3 /bin/Diligence/main.py
+TimeoutStartSec=3min
+TimeoutStopSec=3min
+WorkingDirectory=/bin/Diligence
+StandardOutput=journal
+StandardError=journal
+User=guest
+Group=guest
+Environment="DISPLAY:0"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+Then save the script.
+
+4.Make sure user has Read/Write Permission for /usr/bin/python3 and /bin/XFaceFolderName/
+5.use command to reload services 'sudo systemctl daemon-reload'
+6.use command to start service 'sudo systemctl start myapp.service'
+7.to check status of service 'sudo systemctl status myapp.service'
+8.Log file can be viewed by using command 'journalctl -u myapp.service'
+
+###
+guest@ubuntu:~$ sudo journalctl -f -u XFace.service
+[sudo] password for guest: 
+-- Logs begin at Tue 2023-03-28 02:54:06 +09. --
+ 3月 08 17:21:40 ubuntu python3[2363]:   File "/usr/lib/python3.8/tkinter/__init__.py", line 2270, in __init__
+ 3月 08 17:21:40 ubuntu python3[2363]:     self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+ 3月 08 17:21:40 ubuntu python3[2363]: _tkinter.TclError: no display name and no $DISPLAY environment variable
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Main process exited, code=exited, status=1/FAILURE
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Failed with result 'exit-code'.
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Scheduled restart job, restart counter is at 5.
+ 3月 08 17:21:40 ubuntu systemd[1]: Stopped XFace.
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Start request repeated too quickly.
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Failed with result 'exit-code'.
+ 3月 08 17:21:40 ubuntu systemd[1]: Failed to start XFace.
+^Z
+[2]+  Stopped                 sudo journalctl -f -u XFace.service
+guest@ubuntu:~$ 
+guest@ubuntu:~$ 
+guest@ubuntu:~$ sudo systemctl status XFace.service
+● XFace.service - XFace
+     Loaded: loaded (/etc/systemd/system/XFace.service; enabled; vendor preset: enabled)
+     Active: failed (Result: exit-code) since Fri 2024-03-08 17:21:40 +09; 2min 3s ago
+    Process: 2363 ExecStart=/usr/bin/python3 /bin/Diligence/main.py (code=exited, status=1/FAILURE)
+   Main PID: 2363 (code=exited, status=1/FAILURE)
+
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Main process exited, code=exited, status=1/FAILURE
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Failed with result 'exit-code'.
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Scheduled restart job, restart counter is at 5.
+ 3月 08 17:21:40 ubuntu systemd[1]: Stopped XFace.
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Start request repeated too quickly.
+ 3月 08 17:21:40 ubuntu systemd[1]: XFace.service: Failed with result 'exit-code'.
+ 3月 08 17:21:40 ubuntu systemd[1]: Failed to start XFace.
+guest@ubuntu:~$
+###
